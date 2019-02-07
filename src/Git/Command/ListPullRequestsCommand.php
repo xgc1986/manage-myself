@@ -29,6 +29,7 @@ class ListPullRequestsCommand extends Command
     {
         $this->setName('git:pr:list');
         $this->addOption('pending', 'p', InputOption::VALUE_NONE, 'only shows pull requests that are waiting to you for fix or review');
+        $this->addOption('legend', 'l', InputOption::VALUE_OPTIONAL, 'shows a legend on the top', 0);
     }
 
     /**
@@ -80,7 +81,9 @@ class ListPullRequestsCommand extends Command
 
         shell_exec('reset');
 
-        $this->renderLegend($output);
+        if ($input->getOption('legend')) {
+            $this->renderLegend($output);
+        }
 
         foreach ($repositories as $repository) {
             try {
