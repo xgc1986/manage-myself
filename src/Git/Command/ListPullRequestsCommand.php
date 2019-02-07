@@ -80,6 +80,8 @@ class ListPullRequestsCommand extends Command
 
         shell_exec('reset');
 
+        $this->renderLegend($output);
+
         foreach ($repositories as $repository) {
             try {
                 $pullRequests = $pullRequestRM->all($repository);
@@ -282,4 +284,23 @@ class ListPullRequestsCommand extends Command
                                                             .((          ,&                                            
                                                                                                                                                                                               
     </green2>';
+
+    /**
+     * @param OutputInterface $output
+     */
+    private function renderLegend(OutputInterface $output): void
+    {
+        $table = new Table($output);
+        $table->setStyle('box-double');
+        $table->setHeaders(['<blue>Legend</blue>']);
+        $table->addRows([
+            ['Title', '<green>another\'s PR</green>, <danger>Needs to bring master</danger>'],
+            ['Author', '<red>have comments</red>, <yellow>has commited, but still has comments</yellow>'],
+            ['Last update', '<red>this PR is old and needs to be fixed asap</red>'],
+            ['Tiramisu', '<white>There are a lot of files to review</white>'],
+            ['Reviewers', '<white3>has approved the PR</white3>, <danger>has to participate</danger>, <red3>has to review again</red3>, <yellow>pending comments</yellow>'],
+        ]);
+
+        $table->render();
+    }
 }
